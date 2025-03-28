@@ -1,9 +1,12 @@
 /**
- * Company CSV to COMPANY_DATA Converter
+ * Company CSV to COMPANY_DATA Converter (First ISIN Only)
  * 
  * This script processes 'companies 16.csv' and creates a JavaScript file
  * with a COMPANY_DATA array of objects containing ISIN and Name properties,
  * sorted alphabetically by company name.
+ * 
+ * If multiple ISINs are present (separated by pipe characters),
+ * only the first ISIN is used.
  * 
  * To run in cursor.ai:
  * 1. Make sure 'companies 16.csv' is in the current directory
@@ -75,8 +78,11 @@ function processCSV(csvContent) {
     
     // Only include if we have a valid ISIN
     if (values[isinIndex]) {
+      // Extract only the first ISIN if multiple ISINs are separated by pipe
+      const firstIsin = values[isinIndex].split('|')[0].trim();
+      
       companyData.push({
-        ISIN: values[isinIndex],
+        ISIN: firstIsin,
         Name: values[nameIndex]
       });
     }
